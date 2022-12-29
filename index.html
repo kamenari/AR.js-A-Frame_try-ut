@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  </head>
+  <body>
+    <a-scene embedded arjs>
+      <a-marker preset="hiro">
+        <a-sphere position="0 1.25 0" radius="1.25" src="https://cdn.glitch.global/f79e5079-e820-4ab3-956a-053a01cba8ad/earth.jpg?v=1672322191934"
+                  animation="
+                             property:rotation;
+                             dur:10000;
+                             from:0 0 0;
+                             to:0 360 0;
+                             loop:-1;
+                             easing:linear;
+                             "
+                  ></a-sphere>
+      </a-marker>
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
+</html>

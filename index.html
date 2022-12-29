@@ -20,6 +20,12 @@
           this.el.addEventListener('markerLost', () => {
             this.isTracking = false;
             console.log(`Tracking: ${this.isTracking}`);
+            // マーカーをロストした際にオブジェクトを初期位置に戻す
+            // オブジェクトを取得
+            const obj = this.data.arobject.object3D;
+            obj.position.set(0, 0, -6);
+            obj.quaternion.set(0, 0, 0, 1);
+            obj.rotationX(3.14/2);
           });
         },
         tick: function (time, timeDelta) {

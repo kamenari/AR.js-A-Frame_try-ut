@@ -4,6 +4,56 @@
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <script>
+      window.onload = () => {
+        // マウス操作に対応
+        window.addEventListener('mousedown', touchDownHandller);
+        window.addEventListener('mousemove', touchMoveHandller);
+        window.addEventListener('mouseup', touchEndHandller);
+        // スマホ操作の対応
+        window.addEventListener('touchstart', touchDownHandller);
+        window.addEventListener('touchmove', touchMoveHandller);
+        window.addEventListener('touchend', touchEndHandller);
+      }
+
+      let startX; // 画面クリックとタッチの開始位置
+      let pressed = false // 現在画面に触っているか
+
+      const touchDownHandller = (e) => {
+        // タッチ開始時の処理
+        console.log('touch start');
+        pressed = true;
+        if (e.touches && e.touches[0]) {
+          // スマホ画面をタッチした場合
+          startX = e.touches[0].clientX;
+        } else if (e.clientX) {
+          // マウスでクリックした場合
+          startX = e.clientX;
+        }
+      }
+      const touchEndHandller = (e) => {
+        // タッチ終了時の処理
+        console.log('touch end');
+         // 画面操作終了
+        pressed = false;
+      }
+      const touchMoveHandller = (e) => {
+        // タッチ移動時の処理
+        console.log('touch move');
+        if (pressed) { // 画面操作中の場合
+          let x = 0;
+          if (e.touches && e.touches[0]) {
+            // スマホ画面をタッチした場合
+            x = e.touches[0].clientX;
+          } else if (e.clientX) {
+            // マウスでクリックした場合
+            x = e.clientX;
+          }
+
+          let obj = document.getElementById('earth').object3D;
+          obj.rotationZ((x-startX) * 0.001); // z軸回転
+        }
+      }
+
       AFRAME.registerComponent('markerhandler', {
         schema: {
           arobject: {type: 'selector'},

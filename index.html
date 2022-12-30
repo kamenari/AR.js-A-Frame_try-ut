@@ -50,7 +50,7 @@
           }
 
           let obj = document.getElementById('earth').object3D;
-          obj.rotationZ((x-startX) * 0.001); // z軸回転
+          obj.rotateZ((x-startX) * 0.001); // z軸回転
         }
       }
 
@@ -75,7 +75,7 @@
             const obj = this.data.arobject.object3D;
             obj.position.set(0, 0, -6);
             obj.quaternion.set(0, 0, 0, 1);
-            obj.rotationX(3.14/2);
+            obj.rotateX(3.14/2);
           });
         },
         tick: function (time, timeDelta) {
@@ -107,19 +107,21 @@
   </head>
   <body>
     <a-scene embedded arjs>
-      <a-marker markerhandler="arobjects:#ar-objects" preset="hiro">
-        <a-sphere position="0 1.25 0" radius="1.25" shadow src="https://cdn.glitch.global/f79e5079-e820-4ab3-956a-053a01cba8ad/earth.jpg?v=1672322191934"
-                  animation="
-                             property:rotation;
-                             dur:10000;
-                             from:0 0 0;
-                             to:0 360 0;
-                             loop:-1;
-                             easing:linear;
-                             "
-                  ></a-sphere>
+      <a-marker markerhandler="arobject:#ar-objects" preset="hiro">
       </a-marker>
       <a-entity camera id="ar-objects">
+        <a-entity id="earth" position="0 0 -6" rotation="0 0 0" scale="0.5 0.5 0.5">
+          <a-sphere position="0 1.25 0" radius="1.25" shadow src="https://cdn.glitch.global/f79e5079-e820-4ab3-956a-053a01cba8ad/earth.jpg?v=1672322191934"
+                    animation="
+                               property:rotation;
+                               dur:10000;
+                               from:0 0 0;
+                               to:0 360 0;
+                               loop:-1;
+                               easing:linear;
+                               "
+                    ></a-sphere>
+          </a-entity>
       </a-entity>
     </a-scene>
   </body>

@@ -3,112 +3,11 @@
   <head>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    <script>
-      window.onload = () => {
-        // マウス操作に対応
-        window.addEventListener('mousedown', touchDownHandller);
-        window.addEventListener('mousemove', touchMoveHandller);
-        window.addEventListener('mouseup', touchEndHandller);
-        // スマホ操作の対応
-        window.addEventListener('touchstart', touchDownHandller);
-        window.addEventListener('touchmove', touchMoveHandller);
-        window.addEventListener('touchend', touchEndHandller);
-      }
-
-      let startX; // 画面クリックとタッチの開始位置
-      let pressed = false // 現在画面に触っているか
-
-      const touchDownHandller = (e) => {
-        // タッチ開始時の処理
-        console.log('touch start');
-        pressed = true;
-        if (e.touches && e.touches[0]) {
-          // スマホ画面をタッチした場合
-          startX = e.touches[0].clientX;
-        } else if (e.clientX) {
-          // マウスでクリックした場合
-          startX = e.clientX;
-        }
-      }
-      const touchEndHandller = (e) => {
-        // タッチ終了時の処理
-        console.log('touch end');
-         // 画面操作終了
-        pressed = false;
-      }
-      const touchMoveHandller = (e) => {
-        // タッチ移動時の処理
-        console.log('touch move');
-        if (pressed) { // 画面操作中の場合
-          let x = 0;
-          if (e.touches && e.touches[0]) {
-            // スマホ画面をタッチした場合
-            x = e.touches[0].clientX;
-          } else if (e.clientX) {
-            // マウスでクリックした場合
-            x = e.clientX;
-          }
-
-          let obj = document.getElementById('earth').object3D;
-          obj.rotationZ((x-startX) * 0.001); // z軸回転
-        }
-      }
-
-      AFRAME.registerComponent('markerhandler', {
-        schema: {
-          arobject: {type: 'selector'},
-        },
-        init: function () {
-          // マーカーの検出とロストの状態を管理する変数を定義、初期値はfalse
-          this.isTracking = false;
-          // markerFoundはマーカー検出時に呼び出される
-          this.el.addEventListener('markerFound', () => {
-            this.isTracking = true;
-            console.log(`Tracking: ${this.isTracking}`);
-          });
-          // markerLostはマーカーがロストした時に呼び出される
-          this.el.addEventListener('markerLost', () => {
-            this.isTracking = false;
-            console.log(`Tracking: ${this.isTracking}`);
-            // マーカーをロストした際にオブジェクトを初期位置に戻す
-            // オブジェクトを取得
-            const obj = this.data.arobject.object3D;
-            obj.position.set(0, 0, -6);
-            obj.quaternion.set(0, 0, 0, 1);
-            obj.rotationX(3.14/2);
-          });
-        },
-        tick: function (time, timeDelta) {
-          // もしマーカーが認識されていれば
-          if (this.isTracking) {
-            // このスクリプトが適用されているオブジェクトを取得
-            const marker = this.el.object3D;
-            // マーカーの位置を取得
-            const markerPosition = this.el.object3D.position;
-            const p = new THREE.Vector3();
-            marker.getWorldPosition(p);
-            // マーカーの姿勢を取得
-            const q = new THREE.Quaternion();
-            marker.getWorldQuaternion(q);
-            const markerRotation = this.el.object3D.rotation;
-            // オブジェクトの位置、姿勢を反映
-            const obj = this.data.arobject.object3D;
-            obj.position.set(p.x, p.y, p.z);
-            obj.quaternion.set(q.x, q.y, q.z, q.w);
-            // マーカーの位置をオブジェクトの位置に設定
-            this.data.arobject.object3D.position.set(markerPosition.x, markerPosition.y, markerPosition.z);
-            // マーカーの回転をオブジェクトの回転に設定
-            this.data.arobject.object3D.rotation.set(markerRotation.x, markerRotation.y, markerRotation.z);
-          }
-          
-        }
-      });
-    </script>
   </head>
   <body>
     <a-scene embedded arjs>
-      <a-marker markerhandler="arobjects:#ar-objects" preset="hiro">
-        <a-sphere position="0 1.25 0" radius="1.25" shadow src="https://cdn.glitch.global/f79e5079-e820-4ab3-956a-053a01cba8ad/earth.jpg?v=1672322191934"
+      <a-marker preset="hiro">
+        <a-sphere position="0 1.25 0" radius="1.25" src="https://cdn.glitch.com/6668328a-fbb0-4645-8a4e-7a21aac2ab17%2Fearth.jpg?v=1606211796642"
                   animation="
                              property:rotation;
                              dur:10000;
@@ -119,8 +18,7 @@
                              "
                   ></a-sphere>
       </a-marker>
-      <a-entity camera id="ar-objects">
-      </a-entity>
+      <a-entity camera></a-entity>
     </a-scene>
   </body>
 </html>
